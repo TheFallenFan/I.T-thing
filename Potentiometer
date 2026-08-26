@@ -1,0 +1,9 @@
+from machine import Pin, ADC, PWM
+
+pot = ADC(Pin(26))       # ADC pin, e.g. GP26
+led = PWM(Pin(15))       # PWM-capable pin, e.g. GP15
+led.freq(1000)
+
+while True:
+    pot_value = pot.read_u16()          # 0 to 65535
+    led.duty_u16(pot_value)             # set brightness directly
