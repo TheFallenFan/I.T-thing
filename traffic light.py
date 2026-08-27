@@ -25,7 +25,7 @@ while True:
     change_LED(*set_led(255, 0, 0))
     sleep(3)
     for i in range (0, 5):
-        change_LED(*set_led(205, 93, 52))
+        change_LED(*set_led(255, 43, 0))
         sleep(0.5)
         change_LED(*set_led(0, 0, 0))
         sleep(0.5)
