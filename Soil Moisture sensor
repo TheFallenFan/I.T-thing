@@ -1,1 +1,70 @@
+from machine import Pin, ADC
+import dht
+import time
 
+# Raspberry Pi Pico W pins
+soil_sensor = ADC(26)       # Soil moisture sensor
+potentiometer = ADC(27)    # Potentiometer
+dht_sensor = dht.DHT11(Pin(15))
+
+button = Pin(14, Pin.IN, Pin.PULL_DOWN)
+green_led = Pin(13, Pin.OUT)
+red_led = Pin(12, Pin.OUT)
+
+# Adjust this value to change how sensitive the soil sensor is
+DRY_LEVEL = 30000
+
+# Potentiometer mode:
+# Turn the potentiometer to set the watering level
+POT_LEVEL = 32768
+
+while True:
+
+    # Read temperature and humidity
+    dht_sensor.measure()
+    temperature = dht_sensor.temperature()
+    humidity = dht_sensor.humidity()
+
+    # Read soil moisture
+    soil_value = soil_sensor.read_u16()
+
+    # Read potentiometer
+    pot_value = potentiometer.read_u16()
+
+    # Button switches between automatic and potentiometer mode
+    if button.value():
+        mode = "POTENTIOMETER"
+    else:
+        mode = "SOIL SENSOR"
+
+    print("----------------------")
+    print("Temperature:", temperature, "C")
+    print("Humidity:", humidity, "%")
+    print("Soil:", soil_value)
+    print("Potentiometer:", pot_value)
+    print("Mode:", mode)
+
+    if mode == "SOIL SENSOR":
+        # Dry soil = green LED
+        if soil_value < DRY_LEVEL:
+            green_led.on()
+            red_led.off()
+            print("Soil is DRY - WATERING")
+        else:
+            green_led.off()
+            red_led.on()
+            print("Soil is WET - NO WATERING")
+
+    else:
+        # Potentiometer controls the watering level
+        if pot_value < POT_LEVEL:
+            green_led.on()
+            red_led.off()
+            print("Pot says: WATERING")
+        else:
+            green_led.off()
+            red_led.on()
+            print("Pot says: NO WATERING")
+
+    # Measure every 30 seconds
+    time.sleep(30)
