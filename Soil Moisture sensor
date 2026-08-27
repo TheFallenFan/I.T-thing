@@ -1,7 +1,6 @@
 from machine import Pin, ADC
 import dht
 import time
-
 # Raspberry Pi Pico W pins
 soil_sensor = ADC(26)       # Soil moisture sensor
 potentiometer = ADC(27)    # Potentiometer
