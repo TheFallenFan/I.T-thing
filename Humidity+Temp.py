@@ -10,3 +10,4 @@ while True:
     temp = str(sensor.temperature()) + "°C"
     hum = str(sensor.humidity()) + "%"
     print("Temperature:", temp, "| Humidity:" ,hum)
+    time.sleep(1)
