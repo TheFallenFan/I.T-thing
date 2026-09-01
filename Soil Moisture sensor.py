@@ -1,16 +1,14 @@
-              from machine import ADC, Pin
+from machine import ADC, Pin
 import time
 
 s1 = ADC(Pin(26))
 s2 = ADC(Pin(27))
-l = Pin(15, Pin.OUT)
+valve_led = Pin(15, Pin.OUT)
 
 while True:
     avg_moisture = (s1.read_u16() + s2.read_u16()) / 2
-    
     if avg_moisture > 45000:
-        l.on()
+        valve_led.on()
         time.sleep(30)
-        l.off()
-        
+        valve_led.off()
     time.sleep(1)
